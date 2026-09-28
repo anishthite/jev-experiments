@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#071711">
+  <title>Blackjack with Jev</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Blackjack home"><span class="brand-mark">♠</span><span>BLACKJACK</span></a>
+    <div class="bankroll-pill"><span>Bankroll</span><strong id="bankroll">$1,000</strong></div>
+  </header>
+
+  <main>
+    <section class="table" aria-label="Blackjack table">
+      <div class="table-line" aria-hidden="true"></div>
+      <div class="seat dealer-seat">
+        <div class="player-label">
+          <img src="/jev.svg" alt="" class="avatar">
+          <div><strong>Jev</strong><span>TypeSafe AI dealer</span></div>
+        </div>
+        <div id="dealer-score" class="score" aria-live="polite">—</div>
+        <div id="dealer-hand" class="hand" aria-label="Dealer hand"></div>
+      </div>
+
+      <div class="center-message" aria-live="polite">
+        <p id="eyebrow">THE TABLE IS OPEN</p>
+        <h1 id="status">Place your wager</h1>
+        <p id="substatus">Blackjack pays 3 to 2 · Dealer stands on 17</p>
+      </div>
+
+      <div class="seat player-seat">
+        <div id="player-hand" class="hand" aria-label="Your hand"></div>
+        <div class="player-row">
+          <div class="player-label you"><span class="avatar monogram">YOU</span><div><strong>Your hand</strong><span id="bet-label">No wager</span></div></div>
+          <div id="player-score" class="score">—</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="controls" aria-label="Game controls">
+      <div id="betting-controls" class="betting-controls">
+        <div class="wager-heading"><span>Choose your wager</span><button id="clear-bet" class="text-button">Clear</button></div>
+        <div class="chips" id="chips">
+          <button class="chip chip-5" data-value="5" aria-label="Add 5 dollar chip"><span>$5</span></button>
+          <button class="chip chip-25" data-value="25" aria-label="Add 25 dollar chip"><span>$25</span></button>
+          <button class="chip chip-100" data-value="100" aria-label="Add 100 dollar chip"><span>$100</span></button>
+          <button class="chip chip-500" data-value="500" aria-label="Add 500 dollar chip"><span>$500</span></button>
+        </div>
+        <div class="wager-total"><span>Wager</span><strong id="wager">$0</strong></div>
+        <button id="deal" class="primary" disabled>Deal cards <kbd>Space</kbd></button>
+      </div>
+      <div id="play-controls" class="play-controls" hidden>
+        <button id="hit" class="primary">Hit <kbd>H</kbd></button>
+        <button id="stand" class="secondary">Stand <kbd>S</kbd></button>
+        <button id="double" class="secondary">Double <kbd>D</kbd></button>
+        <button id="new-round" class="primary" hidden>Play again <kbd>Space</kbd></button>
+      </div>
+      <p id="error" class="error" role="alert"></p>
+    </section>
+  </main>
+  <footer><span>♣</span><span>Play responsibly</span><span>♦</span></footer>
+  <script src="/app.js" defer></script>
+</body>
+</html>
