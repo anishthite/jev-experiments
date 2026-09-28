@@ -4,6 +4,7 @@
   "account_id": "38136d7e8e51d4450fd5687cdba2ce2a",
   "main": "worker.js",
   "compatibility_date": "2026-09-28",
+  "kv_namespaces": [{ "binding": "GAMES", "id": "8be5900480904f3dad9cc13b367bb757" }],
   "assets": {
     "directory": "./public",
     "binding": "ASSETS",

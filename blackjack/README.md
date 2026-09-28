@@ -38,4 +38,4 @@ Valid actions are `hit`, `stand`, and `double`. Fetch current state with:
 curl http://localhost:3000/api/games/GAME_ID
 ```
 
-Games are held in memory and reset when the process restarts. Dealer stands on all 17s; natural blackjack pays 3:2.
+Games are held in memory and reset when the process restarts. Jev uses the TypeSafe `~typesafe/jev-latest` decision model through OpenRouter to choose whether to hit or stand; natural blackjack pays 3:2. Production requires the `OPENROUTER_API_KEY` Wrangler secret.

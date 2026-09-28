@@ -36,12 +36,12 @@
     ui.bankroll.textContent=money(bankroll); ui.wager.textContent=money(wager); ui.betLabel.textContent=wager?`${money(wager)} wagered`:"No wager";
     hand(ui.playerHand,g.player?.cards||g.player?.hand||g.playerCards); hand(ui.dealerHand,g.dealer?.cards||g.dealer?.hand||g.dealerCards);
     ui.playerScore.textContent=g.player?.value??g.playerValue??"—"; ui.dealerScore.textContent=g.dealer?.value??g.dealerValue??"—";
-    const done=finished(g), m=message(g); ui.eyebrow.textContent=m.eye;ui.status.textContent=m.title;ui.substatus.textContent=m.sub;
+    const done=finished(g), m=message(g), decision=g.jevDecision; ui.eyebrow.textContent=m.eye;ui.status.textContent=m.title;ui.substatus.textContent=decision?`Jev chose ${decision.move.toUpperCase()} · ${Math.round((decision.confidence||0)*100)}% confidence`:m.sub;
     ui.betting.hidden=true; ui.playing.hidden=false; ui.again.hidden=!done;
     const allowed=g.allowedActions||g.allowed_actions||g.availableActions||["hit","stand","double"];
     ["hit","stand","double"].forEach(a=>{ui[a].hidden=done||!allowed.includes(a);ui[a].disabled=busy;});
   }
-  function reset() { game=null;wager=0;ui.wager.textContent=money(0);ui.betLabel.textContent="No wager";ui.dealerHand.innerHTML="";ui.playerHand.innerHTML="";ui.dealerScore.textContent="—";ui.playerScore.textContent="—";ui.eyebrow.textContent="THE TABLE IS OPEN";ui.status.textContent="Place your wager";ui.substatus.textContent="Blackjack pays 3 to 2 · Dealer stands on 17";ui.betting.hidden=false;ui.playing.hidden=true;ui.deal.disabled=true;ui.error.textContent=""; }
+  function reset() { game=null;wager=0;ui.wager.textContent=money(0);ui.betLabel.textContent="No wager";ui.dealerHand.innerHTML="";ui.playerHand.innerHTML="";ui.dealerScore.textContent="—";ui.playerScore.textContent="—";ui.eyebrow.textContent="THE TABLE IS OPEN";ui.status.textContent="Place your wager";ui.substatus.textContent="Blackjack pays 3 to 2 · Jev calls his own shots";ui.betting.hidden=false;ui.playing.hidden=true;ui.deal.disabled=true;ui.error.textContent=""; }
   async function request(url, options) { const res=await fetch(url,{headers:{"Content-Type":"application/json"},...options}); let data=null;try{data=await res.json()}catch{} if(!res.ok) throw new Error(data?.error||data?.message||`Request failed (${res.status})`); return data; }
   async function deal() { if(!wager||busy)return; setBusy(true);try{const g=await request("/api/games",{method:"POST",body:JSON.stringify({wager,bankroll,chips:bankroll})});render(g);}catch(e){fail(e)}finally{setBusy(false)} }
   async function action(name) { if(!game||busy||finished(game))return;setBusy(true);try{const g=await request(`/api/games/${encodeURIComponent(game.id)}/actions`,{method:"POST",body:JSON.stringify({action:name})});render(g);}catch(e){fail(e)}finally{setBusy(false)} }
