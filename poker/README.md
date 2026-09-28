@@ -2,7 +2,7 @@
 
 **Live:** https://jev-poker.anishthite.workers.dev
 
-A dependency-free heads-up no-limit Texas Hold’em game against Jev, with a public REST API.
+A heads-up no-limit Texas Hold’em game against OpenRouter’s `typesafe/jev-router`, backed by the linked Jev latest model, with a public REST API. The deployed Worker stores `OPENROUTER_API_KEY` as an encrypted secret and falls back to a local poker bot if the model is unavailable.
 
 ## Run
 
