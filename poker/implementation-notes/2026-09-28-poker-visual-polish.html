@@ -1,0 +1,53 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Poker visual polish — 2026-09-28</title>
+<style>body{font:14px/1.5 ui-monospace,monospace;max-width:900px;margin:40px auto;padding:0 20px;color:#222}table{border-collapse:collapse;width:100%;margin:12px 0}td,th{border:1px solid #ccc;padding:4px 8px;text-align:left;vertical-align:top}h1{font-size:18px}h2{font-size:14px;margin-top:28px}.id{color:#888;white-space:nowrap}</style></head><body>
+<h1>Spec — Poker visual polish</h1>
+<p>Jev Poker · ~/workspace/jev-experiments/poker · 2026-09-28 · status done · blast small (public/* only)</p>
+
+<h2>Summary</h2>
+<table>
+<tr><th>Goal</td><td>"Make the poker game look better" — motion + result-feedback polish over the existing restrained green/gold theme (prior pass: D-008 in 2026-09-28-jev-poker.html).</td></tr>
+<tr><th>Surface</td><td>public/index.html, public/app.js, public/styles.css only. No server/API changes.</td></tr>
+</table>
+
+<h2>Changes</h2>
+<table>
+<tr><th>What</th><th>Where</th><th>How</th></tr>
+<tr><td>Card deal animation</td><td>styles.css</td><td>@keyframes deal on opacity + translate (not transform, so hero-card rotation survives). Staggered nth-child delays on hole/board cards.</td></tr>
+<tr><td>No re-animation on re-render</td><td>app.js</td><td>setHTML() caches last HTML per container; innerHTML only rewritten when the card set actually changes (new hand, new street, showdown reveal).</td></tr>
+<tr><td>Suit under rank corner</td><td>styles.css</td><td>.card:before{content:attr(data-suit)} — no JS change; backs excluded.</td></tr>
+<tr><td>Winner glow</td><td>app.js + styles.css</td><td>render() toggles .winner on winning seat capsule; gold border + glow. Split pot: neither seat glows.</td></tr>
+<tr><td>Result message tint</td><td>app.js + styles.css</td><td>.message.win gold / .lose red on the result headline.</td></tr>
+<tr><td>Showdown hand names</td><td>index.html + app.js + styles.css</td><td>#hero-hand / #jev-hand pills beside hole cards, populated from result.hands (previously unused DTO field). :empty hides them; hidden ≤380px and short-mobile layouts.</td></tr>
+<tr><td>Stack-change pulse</td><td>app.js + styles.css</td><td>prevStacks diff in render(); .bump gold flash on the changed stack count.</td></tr>
+</table>
+
+<h2>Decisions</h2>
+<table>
+<tr><th class="id">D-101</td><td>Animate via the CSS `translate` property, not `transform`, so the fanned hero-card rotation (D-008) is preserved. Modern browsers only (Safari 14.1+).</td></tr>
+<tr><th class="id">D-102</td><td>Whole board re-deals on each new street rather than animating only the new card(s). Reads as a fresh deal; finer diffing not worth the code.</td></tr>
+</table>
+
+<h2>Tradeoffs</h2>
+<table>
+<tr><th class="id">T-101</th><td>Hand-name pills hidden on ≤380px / short viewports over squeezing them in. Chosen: no overflow risk. Rejected: responsive repositioning — cramped layouts have no free space beside cards.</td></tr>
+<tr><th class="id">T-102</th><td>No chip-stack graphic beside the pot (considered). Pill + bump pulse carries the feedback; skip until someone asks.</td></tr>
+</table>
+
+<h2>Verification</h2>
+<table>
+<tr><td>node --check public/app.js · npm test (0 fail) · playwright-cli: played to showdown, confirmed deal animation, winner glow, hand names, stack bump (screenshots /tmp/poker1.png, /tmp/poker2.png).</td></tr>
+</table>
+
+<h2>Reversibility</h2>
+<table><tr><th class="id">R-101</th><td>small — additive CSS block + additive JS; revert the three public/* files.</td></tr></table>
+
+<h2>Revision 2 — noise reduction (user feedback: "easier to use, less visual noise")</h2>
+<table>
+<tr><th class="id">D-103</td><td>Delete decorative noise: grain overlay (body:before), "JEV ♠ HEADS UP" watermark (.felt:before), dashed gold inset (.felt:after, both occurrences), double-hatch card backs → single hatch, felt rail 9px+outline → 6px clean border, lighter shadows. Rationale: every layer competed with the cards; the table now reads cards-first.</td></tr>
+<tr><th class="id">D-104</td><td>Add .seat.active turn indicator (gold ring on the seat to act). Cheapest persistent whose-turn signal; message bar alone required reading.</td></tr>
+<tr><td colspan="2">Verified: npm test 5/0, node --check, browser screenshot /tmp/poker-clean.png. Committed + pushed.</td></tr>
+</table>
+
+<h2>Followups</h2>
+<table><tr><th class="id">L-101</th><td>If wanted later: per-card board animation, pot chip graphics, sound. Not requested.</td></tr></table>
+</body></html>
